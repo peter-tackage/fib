@@ -13,23 +13,30 @@ class FibonacciGeneratorTest {
         fibonacciGenerator = FibonacciGenerator()
     }
 
+    // TODO These could be parameterized tests in JUnit 5.
+
     @Test
-    fun `fib returns 0 for 0`() {
+    fun `calculate returns 0 for position 0`() {
         assertThat(fibonacciGenerator.calculate(0)).isEqualTo(0)
     }
 
     @Test
-    fun `fib returns 1 for 1`() {
+    fun `calculate returns 1 for position 1`() {
         assertThat(fibonacciGenerator.calculate(1)).isEqualTo(1)
     }
 
     @Test
-    fun `fib returns 1 for 2`() {
+    fun `calculate returns 1 for position 2`() {
         assertThat(fibonacciGenerator.calculate(2)).isEqualTo(1)
     }
 
     @Test
-    fun `fib returns 55 for 10`() {
+    fun `calculate returns 3 for position 4`() {
+        assertThat(fibonacciGenerator.calculate(4)).isEqualTo(3)
+    }
+
+    @Test
+    fun `calculate returns 55 for position 10`() {
         assertThat(fibonacciGenerator.calculate(10)).isEqualTo(55)
     }
 }
