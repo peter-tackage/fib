@@ -49,6 +49,6 @@ class MainActivity : AppCompatActivity() {
             }
 
     private companion object {
-        val TESTING_DELAY_MILLIS: Long = 0
+        const val TESTING_DELAY_MILLIS: Long = 0
     }
 }
