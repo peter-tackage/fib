@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
-import java.lang.ArithmeticException
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,23 +30,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displayFibonacciSequence(): Job =
-        GlobalScope.launch {
-            var position = 0
-            while (true) {
-                try {
-                    val result = fibonacciGenerator.calculate(position++)
-                    withContext(Dispatchers.Main) {
-                        fibonacciTextView.append(result.toString().plus("\n"))
+            GlobalScope.launch {
+                var position = 0
+                while (true) {
+                    try {
+                        val result = fibonacciGenerator.calculate(position++)
+                        withContext(Dispatchers.Main) {
+                            fibonacciTextView.append(result.toString().plus("\n"))
+                        }
+                    } catch (exp: ArithmeticException) {
+                        withContext(Dispatchers.Main) {
+                            fibonacciTextView.append("Done.")
+                        }
+                        break
                     }
-                } catch (exp: ArithmeticException) {
-                    withContext(Dispatchers.Main) {
-                        fibonacciTextView.append("Done.")
-                    }
-                    break
+                    delay(TESTING_DELAY_MILLIS)
                 }
-                delay(TESTING_DELAY_MILLIS)
             }
-        }
 
     private companion object {
         val TESTING_DELAY_MILLIS: Long = 0
