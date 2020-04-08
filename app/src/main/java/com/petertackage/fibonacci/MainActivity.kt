@@ -9,7 +9,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var fibonacciTextView: TextView
     private lateinit var fibonacciGenerator: FibonacciGenerator
-    private var job: Job? = null
+    private lateinit var job: Job
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,25 +21,34 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        job = GlobalScope.launch {
-            var index = 0
-            while (true) {
-                val result = fibonacciGenerator.calculate(index++)
-                if (result in 0..Long.MAX_VALUE) {
-                    withContext(Dispatchers.Main) {
-                        fibonacciTextView.append(result.toString().plus("\n"))
-                    }
-                } else {
-                    fibonacciTextView.append("Done.")
-                    break
-                }
-            }
-        }
+        job = displayFibonacciSequence()
     }
 
     override fun onStop() {
         super.onStop()
-        job?.cancel()
+        job.cancel()
     }
 
+    private fun displayFibonacciSequence(): Job =
+        GlobalScope.launch {
+            var position = 0
+            while (true) {
+                try {
+                    val result = fibonacciGenerator.calculate(position++)
+                    withContext(Dispatchers.Main) {
+                        fibonacciTextView.append(result.toString().plus("\n"))
+                    }
+                } catch (exp: IllegalArgumentException) {
+                    withContext(Dispatchers.Main) {
+                        fibonacciTextView.append("Done.")
+                    }
+                    break
+                }
+                delay(TESTING_DELAY)
+            }
+        }
+
+    private companion object {
+        val TESTING_DELAY: Long = 0
+    }
 }
