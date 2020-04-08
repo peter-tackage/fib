@@ -45,11 +45,11 @@ class MainActivity : AppCompatActivity() {
                     }
                     break
                 }
-                delay(TESTING_DELAY)
+                delay(TESTING_DELAY_MILLIS)
             }
         }
 
     private companion object {
-        val TESTING_DELAY: Long = 0
+        val TESTING_DELAY_MILLIS: Long = 0
     }
 }
