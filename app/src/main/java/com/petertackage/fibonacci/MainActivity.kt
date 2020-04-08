@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
+import java.lang.ArithmeticException
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
                         fibonacciTextView.append(result.toString().plus("\n"))
                     }
-                } catch (exp: IllegalArgumentException) {
+                } catch (exp: ArithmeticException) {
                     withContext(Dispatchers.Main) {
                         fibonacciTextView.append("Done.")
                     }

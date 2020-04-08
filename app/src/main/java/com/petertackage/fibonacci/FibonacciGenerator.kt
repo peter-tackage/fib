@@ -13,13 +13,9 @@ class FibonacciGenerator(
     private fun existing(position: Int) = calculated[position]
 
     private fun calculateAndSet(position: Int): Long {
-        try {
-            val result = Math.addExact(calculate(position - 1), calculate(position - 2))
-            calculated[position] = result
-            return result
-        } catch (exp: ArithmeticException) {
-            throw IllegalArgumentException("Unable to calculate Fibonacci number for position: $position")
-        }
+        val result = Math.addExact(calculate(position - 1), calculate(position - 2))
+        calculated[position] = result
+        return result
     }
 
 }
