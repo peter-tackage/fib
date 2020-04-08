@@ -14,9 +14,7 @@ class FibonacciGenerator(
 
     private fun calculateAndSet(position: Int): Long {
         // Use addExact to detect arithmetic overflow in calculation
-        val result = Math.addExact(calculate(position - 1), calculate(position - 2))
-        calculated[position] = result
-        return result
+         return Math.addExact(calculate(position - 1), calculate(position - 2))
+            .also {calculated[position] = it }
     }
-
 }
