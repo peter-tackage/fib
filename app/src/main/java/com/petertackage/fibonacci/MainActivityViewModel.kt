@@ -1,7 +1,6 @@
 package com.petertackage.fibonacci
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.GlobalScope
@@ -15,15 +14,10 @@ class MainActivityViewModel(
     private val testingDelayMillis: Long = 250
 ) : ViewModel() {
 
-    private val numberStream: MutableLiveData<Long> = MutableLiveData<Long>()
-    private val sequence: LiveData<List<Long>>
+    private val sequence: MutableLiveData<List<Long>> = MutableLiveData()
     private val job: Job
 
     init {
-        sequence = numberStream.scan(listOf(),
-            { existing, new ->
-                existing.toMutableList().apply { add(new) }.toList()
-            }) // FIXME There must be a better way
         job = generateFibonacciSequence(seed)
     }
 
@@ -32,10 +26,12 @@ class MainActivityViewModel(
     private fun generateFibonacciSequence(seed: Int): Job =
         GlobalScope.launch {
             var position = seed
+            val values = mutableListOf<Long>()
             while (true) {
                 try {
                     val result = fibonacciGenerator.calculate(position++)
-                    numberStream.postValue(result)
+                    values.add(result)
+                    sequence.postValue(values.toList())
                 } catch (exp: ArithmeticException) {
                     break
                 }
@@ -46,21 +42,6 @@ class MainActivityViewModel(
     override fun onCleared() {
         super.onCleared()
         job.cancel()
-    }
-
-    // https://github.com/adibfara/Lives
-    fun <T, R> LiveData<T>.scan(
-        initialSeed: R,
-        accumulator: (accumulated: R, currentValue: T) -> R
-    ): MutableLiveData<R> {
-        var accumulatedValue = initialSeed
-        return MediatorLiveData<R>().apply {
-            value = initialSeed
-            addSource(this@scan) { emittedValue ->
-                accumulatedValue = accumulator(accumulatedValue, emittedValue!!)
-                value = accumulatedValue
-            }
-        }
     }
 
 }
