@@ -30,7 +30,7 @@ class MainActivityViewModel(
             while (true) {
                 try {
                     val result = fibonacciGenerator.calculate(position++)
-                    values.add(result)
+                    values+=result
                     sequence.postValue(values.toList())
                 } catch (exp: ArithmeticException) {
                     break
