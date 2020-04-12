@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 class MainActivityViewModel(
     private val fibonacciGenerator: FibonacciGenerator = FibonacciGenerator(),
     seed: Int = 0,
-    private val testingDelayMillis: Long = 250
+    private val testingDelayMillis: Long = 0
 ) : ViewModel() {
 
     private val sequence: MutableLiveData<List<Long>> = MutableLiveData()
@@ -31,6 +31,7 @@ class MainActivityViewModel(
                 try {
                     val result = fibonacciGenerator.calculate(position++)
                     values+=result
+                    // toList() gives us a shallow copy which should be enough, because Longs are immutable.
                     sequence.postValue(values.toList())
                 } catch (exp: ArithmeticException) {
                     break
