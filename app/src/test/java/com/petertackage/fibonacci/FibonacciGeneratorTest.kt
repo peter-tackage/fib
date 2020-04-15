@@ -1,6 +1,6 @@
 package com.petertackage.fibonacci
 
-import com.google.common.truth.Truth.assertThat
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 

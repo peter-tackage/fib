@@ -9,7 +9,7 @@ import kotlinx.coroutines.*
 class MainActivityViewModel(
     private val fibonacciGenerator: FibonacciGenerator = FibonacciGenerator(),
     seed: Int = 0,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
+    defaultDispatcher: CoroutineDispatcher = Dispatchers.Default,
     private val testingDelayMillis: Long = 100
 ) : ViewModel() {
 
@@ -19,11 +19,13 @@ class MainActivityViewModel(
 
     init {
         // Launch creates a new coroutine in the ViewModel scope (automatically cancelled).
-        // TODO Should this use the dispatcher here?
-        viewModelScope.launch { generateFibonacciSequence(seed) }
+        viewModelScope.launch(defaultDispatcher) { generateFibonacciSequence(seed) }
     }
 
-    private suspend fun generateFibonacciSequence(seed: Int) = withContext(dispatcher) {
+    // - To be able to access isActive, make this an extension - alternative is to explicitly use
+    //   withContext(defaultDispatcher) { // impl }.
+    // - Is a suspend function, as calls delay.
+    private suspend fun CoroutineScope.generateFibonacciSequence(seed: Int) {
         var position = seed
         val values = mutableListOf<Long>()
         while (isActive) {
@@ -31,6 +33,7 @@ class MainActivityViewModel(
                 val result = fibonacciGenerator.calculate(position++)
                 values += result
                 // toList() gives us a shallow copy which should be enough, because Longs are immutable.
+                // Use postValue as we are on a background thread.
                 mutableSequence.postValue(values.toList())
             } catch (exp: ArithmeticException) {
                 break
