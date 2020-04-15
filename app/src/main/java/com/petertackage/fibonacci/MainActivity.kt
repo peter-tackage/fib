@@ -15,9 +15,9 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val model: MainActivityViewModel by viewModels()
+        val viewModel: MainActivityViewModel by viewModels()
 
-        model.sequence
+        viewModel.sequence
             .observe(this,
                 Observer { values ->
                     binding.textviewMainFibonacci.text =

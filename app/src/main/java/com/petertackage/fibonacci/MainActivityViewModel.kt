@@ -4,14 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class MainActivityViewModel(
     private val fibonacciGenerator: FibonacciGenerator = FibonacciGenerator(),
     seed: Int = 0,
-    private val testingDelayMillis: Long = 0
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Default,
+    private val testingDelayMillis: Long = 100
 ) : ViewModel() {
 
     private val mutableSequence = MutableLiveData<List<Long>>()
@@ -19,24 +18,25 @@ class MainActivityViewModel(
     val sequence = mutableSequence as LiveData<List<Long>>
 
     init {
+        // Launch creates a new coroutine in the ViewModel scope (automatically cancelled).
+        // TODO Should this use the dispatcher here?
         viewModelScope.launch { generateFibonacciSequence(seed) }
     }
 
-    private suspend fun generateFibonacciSequence(seed: Int) =
-        withContext(Dispatchers.Default) {
-            var position = seed
-            val values = mutableListOf<Long>()
-            while (true) {
-                try {
-                    val result = fibonacciGenerator.calculate(position++)
-                    values += result
-                    // toList() gives us a shallow copy which should be enough, because Longs are immutable.
-                    mutableSequence.postValue(values.toList())
-                } catch (exp: ArithmeticException) {
-                    break
-                }
-                // delay(testingDelayMillis)
+    private suspend fun generateFibonacciSequence(seed: Int) = withContext(dispatcher) {
+        var position = seed
+        val values = mutableListOf<Long>()
+        while (isActive) {
+            try {
+                val result = fibonacciGenerator.calculate(position++)
+                values += result
+                // toList() gives us a shallow copy which should be enough, because Longs are immutable.
+                mutableSequence.postValue(values.toList())
+            } catch (exp: ArithmeticException) {
+                break
             }
+            delay(testingDelayMillis)
         }
+    }
 
 }
