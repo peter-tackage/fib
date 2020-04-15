@@ -12,7 +12,7 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class MainActivityViewModelTest {
     companion object {
-        const val TESTING_DELAY: Long = 50
+        const val TICK_DURATION_MS: Long = 50
     }
 
     @get:Rule
@@ -27,7 +27,7 @@ class MainActivityViewModelTest {
     fun setUp() {
         viewModel = MainActivityViewModel(
             defaultDispatcher = coroutinesTestRule.testDispatcher,
-            testingDelayMillis = TESTING_DELAY
+            testingDelayMillis = TICK_DURATION_MS
         )
     }
 
@@ -35,27 +35,22 @@ class MainActivityViewModelTest {
     fun `fibonacci streams sequence`() =
         coroutinesTestRule.testDispatcher.runBlockingTest {
             val observer = viewModel.sequence.test()
-            assertThat(observer.values).containsExactly(listOf(0)) // sanity check
 
-            advanceTimeBy(3 * TESTING_DELAY)
+            assertThat(observer.values).containsExactly(listOf(0)) // initial value
 
+            advanceTimeBy(TICK_DURATION_MS)
             assertThat(observer.values)
                 .containsExactly(
                     listOf(0),
-                    listOf(0, 1),
-                    listOf(0, 1, 1),
-                    listOf(0, 1, 1, 2)
+                    listOf(0, 1)
                 )
 
-            advanceTimeBy(TESTING_DELAY)
-
+            advanceTimeBy(TICK_DURATION_MS)
             assertThat(observer.values)
                 .containsExactly(
                     listOf(0),
                     listOf(0, 1),
-                    listOf(0, 1, 1),
-                    listOf(0, 1, 1, 2),
-                    listOf(0, 1, 1, 2, 3)
+                    listOf(0, 1, 1)
                 )
         }
 
