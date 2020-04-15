@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 
         val model: MainActivityViewModel by viewModels()
 
-        model.getSequence()
+        model.sequence
             .observe(this,
                 Observer { values ->
                     binding.textviewMainFibonacci.text =

@@ -3,10 +3,10 @@ package com.petertackage.fibonacci
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivityViewModel(
     private val fibonacciGenerator: FibonacciGenerator = FibonacciGenerator(),
@@ -14,35 +14,29 @@ class MainActivityViewModel(
     private val testingDelayMillis: Long = 0
 ) : ViewModel() {
 
-    private val sequence: MutableLiveData<List<Long>> = MutableLiveData()
-    private val job: Job
+    private val mutableSequence = MutableLiveData<List<Long>>()
+
+    val sequence = mutableSequence as LiveData<List<Long>>
 
     init {
-        job = generateFibonacciSequence(seed)
+        viewModelScope.launch { generateFibonacciSequence(seed) }
     }
 
-    fun getSequence(): LiveData<List<Long>> = sequence
-
-    private fun generateFibonacciSequence(seed: Int): Job =
-        GlobalScope.launch {
+    private suspend fun generateFibonacciSequence(seed: Int) =
+        withContext(Dispatchers.Default) {
             var position = seed
             val values = mutableListOf<Long>()
             while (true) {
                 try {
                     val result = fibonacciGenerator.calculate(position++)
-                    values+=result
+                    values += result
                     // toList() gives us a shallow copy which should be enough, because Longs are immutable.
-                    sequence.postValue(values.toList())
+                    mutableSequence.postValue(values.toList())
                 } catch (exp: ArithmeticException) {
                     break
                 }
-                delay(testingDelayMillis)
+                // delay(testingDelayMillis)
             }
         }
-
-    override fun onCleared() {
-        super.onCleared()
-        job.cancel()
-    }
 
 }
