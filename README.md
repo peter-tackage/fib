@@ -1,4 +1,4 @@
-# Fibonacci
+# Fib
 
 A demo app combining ViewModels, LiveData and Coroutines with testing.
 
