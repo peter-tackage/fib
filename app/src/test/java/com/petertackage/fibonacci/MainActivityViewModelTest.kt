@@ -80,6 +80,5 @@ class MainActivityViewModelTest {
 
 private fun ViewModel.clear() {
     ViewModel::class.java.getDeclaredMethod("clear")
-        .apply { isAccessible = true }
-        .invoke(this)
+        .apply { isAccessible = true }(this)
 }
