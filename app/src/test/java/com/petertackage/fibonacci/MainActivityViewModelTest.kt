@@ -1,6 +1,7 @@
 package com.petertackage.fibonacci
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.ViewModel
 import com.petertackage.livedatatest.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
@@ -64,4 +65,21 @@ class MainActivityViewModelTest {
                 .hasSize(93)
         }
 
+    @Test
+    fun `clearing ViewModel cancels sequence stream`() =
+        coroutinesTestRule.testDispatcher.runBlockingTest {
+            val observer = viewModel.sequence.test()
+
+            viewModel.clear() // simulates ViewModel teardown
+            advanceUntilIdle()
+
+            assertThat(observer.values).containsExactly(listOf(0)) // initial value
+        }
+
+}
+
+private fun ViewModel.clear() {
+    ViewModel::class.java.getDeclaredMethod("clear")
+        .apply { isAccessible = true }
+        .invoke(this)
 }
