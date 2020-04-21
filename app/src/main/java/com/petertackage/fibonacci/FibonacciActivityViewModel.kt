@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.*
 
-class MainActivityViewModel(
+class FibonacciActivityViewModel(
     private val fibonacciGenerator: FibonacciGenerator = FibonacciGenerator(),
     seed: Int = 0,
     defaultDispatcher: CoroutineDispatcher = Dispatchers.Default,
