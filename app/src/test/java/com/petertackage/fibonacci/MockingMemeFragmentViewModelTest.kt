@@ -28,17 +28,17 @@ class MockingMemeFragmentViewModelTest {
     }
 
     @Test
-    fun `converts to mocking`() {
+    fun `converts to mocking meme`() =
         coroutinesTestRule.testDispatcher.runBlockingTest {
             val text = "This is a really good piece of text"
-            val observer = viewModel.mockingText.test()
+            val observer = viewModel.mockingMeme.test()
 
-            viewModel.mock(text)
+            viewModel.toMockingMeme(text)
 
             assertThat(observer.value)
                 .isNotEqualTo(text)
                 .containsIgnoringCase(text)
                 .also { println(observer.value) }
         }
-    }
+
 }

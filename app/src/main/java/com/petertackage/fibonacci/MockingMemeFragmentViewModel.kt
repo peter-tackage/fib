@@ -16,7 +16,7 @@ class MockingMemeFragmentViewModel(
 
     private var job: Job? = null
 
-    fun mock(text: String) {
+    fun toMockingMeme(text: String) {
         // Meant to work like a switch map - discard any conversion that is in progress
         job?.cancel()
         job = viewModelScope.launch(defaultDispatcher) {
@@ -26,7 +26,7 @@ class MockingMemeFragmentViewModel(
     }
 
     private val mutableSarcasticText = MutableLiveData<String>()
-    val mockingText = mutableSarcasticText as LiveData<String>
+    val mockingMeme = mutableSarcasticText as LiveData<String>
 
     private fun toReallyGoodSarcasticText(input: String): String {
         val atRate = 50
