@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.petertackage.fibonacci.databinding.ActivityFibonacciBinding
 
-class FiboacciActivity : AppCompatActivity() {
+class FibonacciActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
