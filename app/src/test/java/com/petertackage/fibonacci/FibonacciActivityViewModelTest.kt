@@ -13,7 +13,7 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class FibonacciActivityViewModelTest {
     companion object {
-        const val TICK_DURATION_MS: Long = 50
+        const val TICK_DURATION_MS: Long = 1_500
     }
 
     @get:Rule
@@ -27,7 +27,7 @@ class FibonacciActivityViewModelTest {
     @Before
     fun setUp() {
         viewModel = FibonacciActivityViewModel(
-            defaultDispatcher = coroutinesTestRule.testDispatcher,
+            dispatcherProvider = provideTestCoroutineDispatcherProvider(coroutinesTestRule.testDispatcher),
             testingDelayMillis = TICK_DURATION_MS
         )
     }
@@ -37,21 +37,23 @@ class FibonacciActivityViewModelTest {
         coroutinesTestRule.testDispatcher.runBlockingTest {
             val observer = viewModel.sequence.test()
 
-            assertThat(observer.values).containsExactly(listOf(0)) // initial value
+            // expect a single value to have been emitted - which is a list with a single entry
+            assertThat(observer.value)
+                .isEqualTo(FibonacciSequence.Streaming(listOf(0))) // initial value
 
             advanceTimeBy(TICK_DURATION_MS)
             assertThat(observer.values)
                 .containsExactly(
-                    listOf(0),
-                    listOf(0, 1)
+                    FibonacciSequence.Streaming(listOf(0)),
+                    FibonacciSequence.Streaming(listOf(0, 1))
                 )
 
             advanceTimeBy(TICK_DURATION_MS)
             assertThat(observer.values)
                 .containsExactly(
-                    listOf(0),
-                    listOf(0, 1),
-                    listOf(0, 1, 1)
+                    FibonacciSequence.Streaming(listOf(0)),
+                    FibonacciSequence.Streaming(listOf(0, 1)),
+                    FibonacciSequence.Streaming(listOf(0, 1, 1))
                 )
         }
 
@@ -60,9 +62,13 @@ class FibonacciActivityViewModelTest {
         coroutinesTestRule.testDispatcher.runBlockingTest {
             advanceUntilIdle()
             assertThat(viewModel.sequence.value)
-                .startsWith(0L, 1L, 1L, 2L, 3L, 5L)
-                .endsWith(7540113804746346429L)
-                .hasSize(93)
+                .isInstanceOfSatisfying(FibonacciSequence.Completed::class.java)
+                {
+                    assertThat(it.values)
+                        .startsWith(0L, 1L, 1L, 2L, 3L, 5L)
+                        .endsWith(7540113804746346429L)
+                        .hasSize(93)
+                }
         }
 
     @Test
@@ -73,7 +79,8 @@ class FibonacciActivityViewModelTest {
             viewModel.clear() // simulates ViewModel teardown
             advanceUntilIdle()
 
-            assertThat(observer.values).containsExactly(listOf(0)) // initial value
+            assertThat(observer.values)
+                .containsExactly(FibonacciSequence.Streaming(listOf(0))) // initial value
         }
 
 }

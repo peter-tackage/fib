@@ -19,9 +19,12 @@ class FibonacciActivity : AppCompatActivity() {
 
         viewModel.sequence
             .observe(this,
-                Observer { values ->
-                    binding.textviewFibonacciValues.text =
-                        values.joinToString(separator = "\n")
+                Observer { sequence ->
+                    when (sequence) {
+                        is FibonacciSequence.Streaming -> binding.textviewFibonacciValues.text =
+                            sequence.values.joinToString(separator = "\n")
+                        is FibonacciSequence.Completed -> binding.textviewFibonacciValues.append("\nDone!")
+                    }
                 })
     }
 

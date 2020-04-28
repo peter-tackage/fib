@@ -31,7 +31,7 @@ class MockingMemeFragmentViewModelTest {
     fun `converts to mocking meme`() =
         coroutinesTestRule.testDispatcher.runBlockingTest {
             val text = "This is a really good piece of text"
-            val observer = viewModel.mockingMeme.test()
+            val observer = viewModel.mockingMemeText.test()
 
             viewModel.toMockingMeme(text)
 
