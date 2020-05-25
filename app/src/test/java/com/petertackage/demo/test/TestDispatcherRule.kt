@@ -1,4 +1,4 @@
-package com.petertackage.demo
+package com.petertackage.demo.test
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -1,7 +1,9 @@
-package com.petertackage.demo
+package com.petertackage.demo.fibonacci
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.ViewModel
+import com.petertackage.demo.test.TestDispatcherRule
+import com.petertackage.demo.test.provideTestCoroutineDispatcherProvider
 import com.petertackage.livedatatest.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
@@ -27,7 +29,9 @@ class FibonacciFragmentViewModelTest {
     @Before
     fun setUp() {
         viewModel = FibonacciFragmentViewModel(
-            dispatcherProvider = provideTestCoroutineDispatcherProvider(coroutinesTestRule.testDispatcher),
+            dispatcherProvider = provideTestCoroutineDispatcherProvider(
+                coroutinesTestRule.testDispatcher
+            ),
             testingDelayMillis = TICK_DURATION_MS
         )
     }

@@ -1,4 +1,4 @@
-package com.petertackage.demo
+package com.petertackage.demo.meme
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,19 +1,18 @@
-package com.petertackage.demo
+package com.petertackage.demo.fibonacci
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.petertackage.demo.databinding.FragmentMemeBinding
+import com.petertackage.demo.databinding.FragmentFibonacciBinding
 
-class MemeFragment : Fragment() {
+class FibonacciFragment : Fragment() {
 
     // Using technique from https://developer.android.com/topic/libraries/view-binding
-    private var _binding: FragmentMemeBinding? = null
+    private var _binding: FragmentFibonacciBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -21,7 +20,7 @@ class MemeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentMemeBinding.inflate(layoutInflater)
+        _binding = FragmentFibonacciBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -33,19 +32,17 @@ class MemeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val viewModel: MockingMemeFragmentViewModel by viewModels()
+        val viewModel: FibonacciFragmentViewModel by viewModels()
 
-        binding.edittextMemeInput.doOnTextChanged { text, _, _, _ ->
-            text?.let {
-                viewModel.toMockingMeme(
-                    it.toString()
-                )
-            }
-        }
-
-        viewModel.mockingMemeText
+        viewModel.sequence
             .observe(viewLifecycleOwner,
-                Observer { text -> binding.textviewMemeOutput.text = text })
+                Observer { sequence ->
+                    when (sequence) {
+                        is FibonacciSequence.Streaming -> binding.textviewFibonacciValues.text =
+                            sequence.values.joinToString(separator = "\n")
+                        is FibonacciSequence.Completed -> binding.textviewFibonacciValues.append("\nDone!")
+                    }
+                })
     }
 
 }

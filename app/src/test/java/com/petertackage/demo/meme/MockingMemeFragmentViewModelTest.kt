@@ -1,6 +1,7 @@
-package com.petertackage.demo
+package com.petertackage.demo.meme
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.petertackage.demo.test.TestDispatcherRule
 import com.petertackage.livedatatest.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest

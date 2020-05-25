@@ -1,9 +1,10 @@
-package com.petertackage.demo
+package com.petertackage.demo.fibonacci
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.petertackage.demo.CoroutineDispatcherProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -50,9 +51,17 @@ class FibonacciFragmentViewModel(
                 values += result
                 // toList() gives us a shallow copy which should be enough, because Longs are immutable.
                 // Use postValue as we are on a background thread.
-                _sequence.postValue(FibonacciSequence.Streaming(values.toList()))
+                _sequence.postValue(
+                    FibonacciSequence.Streaming(
+                        values.toList()
+                    )
+                )
             } catch (exp: ArithmeticException) {
-                _sequence.postValue(FibonacciSequence.Completed(values))
+                _sequence.postValue(
+                    FibonacciSequence.Completed(
+                        values
+                    )
+                )
                 break
             }
             delay(testingDelayMillis)
