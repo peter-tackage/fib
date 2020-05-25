@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -34,9 +35,17 @@ class MemeFragment : Fragment() {
 
         val viewModel: MockingMemeFragmentViewModel by viewModels()
 
+        binding.edittextMemeInput.doOnTextChanged { text, _, _, _ ->
+            text?.let {
+                viewModel.toMockingMeme(
+                    it.toString()
+                )
+            }
+        }
+
         viewModel.mockingMemeText
             .observe(viewLifecycleOwner,
-                Observer { text -> binding.textviewMeme.text = text })
+                Observer { text -> binding.textviewMemeOutput.text = text })
     }
 
 }
