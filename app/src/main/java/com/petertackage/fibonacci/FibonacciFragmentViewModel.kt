@@ -9,7 +9,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
-class FibonacciActivityViewModel(
+class FibonacciFragmentViewModel(
     private val fibonacciGenerator: FibonacciGenerator = FibonacciGenerator(),
     seed: Int = 0,
     dispatcherProvider: CoroutineDispatcherProvider = CoroutineDispatcherProvider(),

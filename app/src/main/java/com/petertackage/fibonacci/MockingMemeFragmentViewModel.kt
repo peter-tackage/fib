@@ -1,13 +1,19 @@
 package com.petertackage.fibonacci
 
-import androidx.lifecycle.*
-import kotlinx.coroutines.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 class MockingMemeFragmentViewModel(
-        defaultConfig: Config = Config(),
-        defaultText: String = "",
-        private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
+    defaultConfig: Config = Config(),
+    defaultText: String = "",
+    private val defaultDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) : ViewModel() {
 
     private var job: Job? = null
@@ -22,22 +28,22 @@ class MockingMemeFragmentViewModel(
     }
 
     private val _mockingMemeText = MutableLiveData(defaultText)
-    val mockingMemeText : LiveData<String> get() = _mockingMemeText
+    val mockingMemeText: LiveData<String> get() = _mockingMemeText
 
     private val _config: MutableLiveData<Config> = MutableLiveData(defaultConfig)
-    val config : LiveData<Config> get() = _config
+    val config: LiveData<Config> get() = _config
 
     private fun toReallySmartSoundingMemeText(text: String): String {
         return text
-                .map { it.randomizeCase(_config.value!!) }
-                .joinToString("")
+            .map { it.randomizeCase(_config.value!!) }
+            .joinToString("")
     }
 
     private fun Char.randomizeCase(config: Config): Char =
-            if (shouldCapitalize(config)) toUpperCase() else toLowerCase()
+        if (shouldCapitalize(config)) toUpperCase() else toLowerCase()
 
-    private fun shouldCapitalize(config : Config) =
-            Random.nextInt(100) < config.rate.percent
+    private fun shouldCapitalize(config: Config) =
+        Random.nextInt(100) < config.rate.percent
 
     // Rules:
     // - Every single character word should be reversed (add option)
@@ -53,8 +59,8 @@ class MockingMemeFragmentViewModel(
     }
 
     data class Config(
-            val rate: Rate = Rate.MEDIUM,
-            val maxConsecutiveChars: Int = 2,
-            val alwaysInvertSingleCharWords: Boolean = true
+        val rate: Rate = Rate.MEDIUM,
+        val maxConsecutiveChars: Int = 2,
+        val alwaysInvertSingleCharWords: Boolean = true
     )
 }

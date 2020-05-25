@@ -11,7 +11,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class FibonacciActivityViewModelTest {
+class FibonacciFragmentViewModelTest {
     companion object {
         const val TICK_DURATION_MS: Long = 1_500
     }
@@ -22,11 +22,11 @@ class FibonacciActivityViewModelTest {
     @get:Rule
     val coroutinesTestRule = TestDispatcherRule()
 
-    private lateinit var viewModel: FibonacciActivityViewModel
+    private lateinit var viewModel: FibonacciFragmentViewModel
 
     @Before
     fun setUp() {
-        viewModel = FibonacciActivityViewModel(
+        viewModel = FibonacciFragmentViewModel(
             dispatcherProvider = provideTestCoroutineDispatcherProvider(coroutinesTestRule.testDispatcher),
             testingDelayMillis = TICK_DURATION_MS
         )
