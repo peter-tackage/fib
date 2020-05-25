@@ -44,28 +44,28 @@ class FibonacciFragmentViewModel(
     //
     private suspend fun CoroutineScope.generateFibonacciSequence(seed: Int) {
         var position = seed
+        var isCompleted = false
         val values = mutableListOf<Long>()
-        while (isActive) {
-            try {
-                val result = fibonacciGenerator.calculate(position++)
-                values += result
-                // toList() gives us a shallow copy which should be enough, because Longs are immutable.
-                // Use postValue as we are on a background thread.
-                _sequence.postValue(
-                    FibonacciSequence.Streaming(
-                        values.toList()
-                    )
-                )
-            } catch (exp: ArithmeticException) {
-                _sequence.postValue(
-                    FibonacciSequence.Completed(
-                        values
-                    )
-                )
-                break
-            }
+        while (isActive && !isCompleted) {
+            Result.runCatching { fibonacciGenerator.calculate(position++) }
+                .onSuccess { values += it; emit(values) }
+                .onFailure { emitCompleted(values); isCompleted = true }
             delay(testingDelayMillis)
         }
+    }
+
+    private fun emitCompleted(values: List<Long>) {
+        _sequence.postValue(FibonacciSequence.Completed(values))
+    }
+
+    private fun emit(values: List<Long>) {
+        // toList() gives us a shallow copy which should be enough, because Longs are immutable.
+        // Use postValue as we are on a background thread.
+        _sequence.postValue(
+            FibonacciSequence.Streaming(
+                values.toList()
+            )
+        )
     }
 
 }
