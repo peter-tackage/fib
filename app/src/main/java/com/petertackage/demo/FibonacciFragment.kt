@@ -1,4 +1,4 @@
-package com.petertackage.fibonacci
+package com.petertackage.demo
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.petertackage.fibonacci.databinding.FragmentFibonacciBinding
+import com.petertackage.demo.databinding.FragmentFibonacciBinding
 
 class FibonacciFragment : Fragment() {
 

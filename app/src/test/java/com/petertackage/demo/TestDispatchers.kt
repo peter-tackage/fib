@@ -1,4 +1,4 @@
-package com.petertackage.fibonacci
+package com.petertackage.demo
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher

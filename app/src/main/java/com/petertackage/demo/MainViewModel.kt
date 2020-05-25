@@ -1,4 +1,4 @@
-package com.petertackage.fibonacci
+package com.petertackage.demo
 
 import androidx.lifecycle.ViewModel
 

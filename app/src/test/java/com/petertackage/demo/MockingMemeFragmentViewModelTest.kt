@@ -1,4 +1,4 @@
-package com.petertackage.fibonacci
+package com.petertackage.demo
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.petertackage.livedatatest.test

@@ -1,4 +1,4 @@
-package com.petertackage.fibonacci
+package com.petertackage.demo
 
 class FibonacciGenerator(
     private val calculated: MutableMap<Int, Long>

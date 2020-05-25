@@ -1,4 +1,4 @@
-package com.petertackage.fibonacci
+package com.petertackage.demo
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before

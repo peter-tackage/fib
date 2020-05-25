@@ -1,4 +1,4 @@
-package com.petertackage.fibonacci
+package com.petertackage.demo
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.petertackage.fibonacci.MainFragment"
+        android:name="com.petertackage.demo.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" >
         <action
@@ -19,12 +19,12 @@
     </fragment>
     <fragment
         android:id="@+id/fibonacciFragment"
-        android:name="com.petertackage.fibonacci.FibonacciFragment"
+        android:name="com.petertackage.demo.FibonacciFragment"
         android:label="fragment_fibonacci"
         tools:layout="@layout/fragment_fibonacci" />
     <fragment
         android:id="@+id/memeFragment"
-        android:name="com.petertackage.fibonacci.MemeFragment"
+        android:name="com.petertackage.demo.MemeFragment"
         android:label="fragment_meme"
         tools:layout="@layout/fragment_meme" />
 </navigation>
