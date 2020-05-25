@@ -36,11 +36,7 @@ class MemeFragment : Fragment() {
         val viewModel: MockingMemeFragmentViewModel by viewModels()
 
         binding.edittextMemeInput.doOnTextChanged { text, _, _, _ ->
-            text?.let {
-                viewModel.toMockingMeme(
-                    it.toString()
-                )
-            }
+            text?.let { viewModel.toMockingMeme(it.toString()) }
         }
 
         viewModel.mockingMemeText
